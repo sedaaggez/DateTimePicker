@@ -17,7 +17,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewDateTime;
-    private Button buttonDateTime;
+    private Button buttonDateTime, buttonDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
         textViewDateTime = findViewById(R.id.textViewDateTime);
         buttonDateTime = findViewById(R.id.buttonDateTime);
+        buttonDate = findViewById(R.id.buttonDate);
 
         buttonDateTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDateTimeDialog();
+            }
+        });
+
+        buttonDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateDialog();
             }
         });
     }
@@ -59,6 +67,25 @@ public class MainActivity extends AppCompatActivity {
                 };
 
                 new TimePickerDialog(MainActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            }
+        };
+
+        new DatePickerDialog(MainActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void showDateDialog() {
+        final Calendar calendar=Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
+
+                textViewDateTime.setText(simpleDateFormat.format(calendar.getTime()));
             }
         };
 
