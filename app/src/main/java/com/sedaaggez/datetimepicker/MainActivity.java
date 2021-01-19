@@ -17,7 +17,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textViewDateTime;
-    private Button buttonDateTime, buttonDate;
+    private Button buttonDateTime, buttonDate, buttonTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         textViewDateTime = findViewById(R.id.textViewDateTime);
         buttonDateTime = findViewById(R.id.buttonDateTime);
         buttonDate = findViewById(R.id.buttonDate);
+        buttonTime = findViewById(R.id.buttonTime);
 
         buttonDateTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showDateDialog();
+            }
+        });
+
+        buttonTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimeDialog();
             }
         });
     }
@@ -90,5 +98,23 @@ public class MainActivity extends AppCompatActivity {
         };
 
         new DatePickerDialog(MainActivity.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void showTimeDialog() {
+        final Calendar calendar=Calendar.getInstance();
+
+        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+
+                textViewDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        };
+
+        new TimePickerDialog(MainActivity.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
 }
